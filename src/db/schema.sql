@@ -1,0 +1,29 @@
+CREATE TABLE IF NOT EXISTS authors (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(120) NOT NULL CHECK (name <> ''),
+  email VARCHAR(255) NOT NULL UNIQUE,
+  bio TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS posts (
+  id SERIAL PRIMARY KEY,
+  author_id INTEGER NOT NULL REFERENCES authors(id) ON DELETE CASCADE,
+  title VARCHAR(200) NOT NULL CHECK (title <> ''),
+  content TEXT NOT NULL CHECK (content <> ''),
+  published BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_posts_author_id ON posts(author_id);
+
+CREATE TABLE IF NOT EXISTS comments (
+  id SERIAL PRIMARY KEY,
+  post_id INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+  author_id INTEGER NOT NULL REFERENCES authors(id) ON DELETE CASCADE,
+  content TEXT NOT NULL CHECK (content <> ''),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id);
+CREATE INDEX IF NOT EXISTS idx_comments_author_id ON comments(author_id);
