@@ -1,0 +1,213 @@
+openapi: 3.0.3
+info:
+  title: API REST Authors & Posts
+  version: 1.0.0
+  description: API académica construida con Node.js, Express y PostgreSQL. Incluye comments como extra credit.
+servers:
+  - url: http://localhost:3000
+    description: Desarrollo local
+tags:
+  - name: Authors
+  - name: Posts
+  - name: Comments
+paths:
+  /authors:
+    get:
+      tags: [Authors]
+      summary: Listar authors
+      responses:
+        '200':
+          description: Lista de authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Author' }
+    post:
+      tags: [Authors]
+      summary: Crear un author
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AuthorInput' }
+      responses:
+        '201': { description: Author creado }
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /authors/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Authors]
+      summary: Obtener un author
+      responses:
+        '200': { description: Detalle del author }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Authors]
+      summary: Actualizar un author
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AuthorInput' }
+      responses:
+        '200': { description: Author actualizado }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Authors]
+      summary: Eliminar un author y sus datos relacionados
+      responses:
+        '204': { description: Eliminado correctamente }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /posts:
+    get:
+      tags: [Posts]
+      summary: Listar posts
+      responses:
+        '200':
+          description: Lista de posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Post' }
+    post:
+      tags: [Posts]
+      summary: Crear un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PostInput' }
+      responses:
+        '201': { description: Post creado }
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /posts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Posts]
+      summary: Obtener un post
+      responses:
+        '200': { description: Detalle del post }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Posts]
+      summary: Actualizar un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PostInput' }
+      responses:
+        '200': { description: Post actualizado }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Posts]
+      summary: Eliminar un post y sus comments
+      responses:
+        '204': { description: Eliminado correctamente }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /posts/author/{authorId}:
+    get:
+      tags: [Posts]
+      summary: Listar posts con detalle de su author
+      parameters:
+        - name: authorId
+          in: path
+          required: true
+          schema: { type: integer, minimum: 1 }
+      responses:
+        '200': { description: Posts del author }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /comments:
+    get:
+      tags: [Comments]
+      summary: Listar comments
+      responses:
+        '200': { description: Lista de comments con author y post }
+    post:
+      tags: [Comments]
+      summary: Crear un comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CommentInput' }
+      responses:
+        '201': { description: Comment creado }
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /posts/{postId}/comments:
+    get:
+      tags: [Comments]
+      summary: Listar comments de un post
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema: { type: integer, minimum: 1 }
+      responses:
+        '200': { description: Comments del post }
+        '404': { $ref: '#/components/responses/NotFound' }
+components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer, minimum: 1 }
+  responses:
+    BadRequest:
+      description: Datos inválidos
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+  schemas:
+    Author:
+      allOf:
+        - type: object
+          properties:
+            id: { type: integer, example: 1 }
+            created_at: { type: string, format: date-time }
+        - $ref: '#/components/schemas/AuthorInput'
+    AuthorInput:
+      type: object
+      required: [name, email]
+      properties:
+        name: { type: string, example: Ana Torres }
+        email: { type: string, format: email, example: ana@example.com }
+        bio: { type: string, nullable: true, example: Autora de tecnología }
+    Post:
+      allOf:
+        - type: object
+          properties:
+            id: { type: integer, example: 1 }
+            created_at: { type: string, format: date-time }
+        - $ref: '#/components/schemas/PostInput'
+    PostInput:
+      type: object
+      required: [author_id, title, content]
+      properties:
+        author_id: { type: integer, minimum: 1, example: 1 }
+        title: { type: string, example: Mi primer post }
+        content: { type: string, example: Contenido del post }
+        published: { type: boolean, default: false }
+    CommentInput:
+      type: object
+      required: [post_id, author_id, content]
+      properties:
+        post_id: { type: integer, minimum: 1, example: 1 }
+        author_id: { type: integer, minimum: 1, example: 1 }
+        content: { type: string, example: Excelente publicación }
+    Error:
+      type: object
+      properties:
+        error: { type: string }
