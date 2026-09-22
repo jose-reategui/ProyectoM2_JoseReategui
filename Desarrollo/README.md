@@ -157,13 +157,3 @@ Crear comment:
 - `404`: recurso o ruta inexistente
 - `500`: error inesperado del servidor
 
-## Commits sugeridos
-
-```text
-chore: initialize express project
-feat: add postgres schema and authors CRUD
-feat: add posts CRUD and validations
-feat: add comments extra credit
-test: add supertest API tests
-docs: add OpenAPI and Railway deployment guide
-```
