@@ -12,7 +12,7 @@ describe('API REST Authors, Posts y Comments', () => {
     const memoryDb = newDb();
     const adapter = memoryDb.adapters.createPg();
     pool = new adapter.Pool();
-    const schema = fs.readFileSync(path.join(__dirname, '..', 'src', 'db', 'schema.sql'), 'utf8');
+    const schema = fs.readFileSync(path.join(__dirname, '..', 'sql', 'setup.sql'), 'utf8');
     await pool.query(schema);
     app = createApp({ db: pool });
   });

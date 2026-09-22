@@ -4,7 +4,7 @@ const path = require('path');
 const pool = require('../src/db/pool');
 
 async function migrate() {
-  const schema = fs.readFileSync(path.join(__dirname, '..', 'src', 'db', 'schema.sql'), 'utf8');
+  const schema = fs.readFileSync(path.join(__dirname, '..', 'sql', 'setup.sql'), 'utf8');
   await pool.query(schema);
   console.log('Migración completada correctamente.');
 }

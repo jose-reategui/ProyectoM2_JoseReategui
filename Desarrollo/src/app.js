@@ -23,7 +23,7 @@ function createApp({ db = defaultPool } = {}) {
   const authorsController = createAuthorsController(authorsService);
   const postsController = createPostsController(postsService, authorsService);
   const commentsController = createCommentsController(commentsService, authorsService, postsService);
-  const openapi = YAML.load(path.join(__dirname, 'docs', 'openapi.yaml'));
+  const openapi = YAML.load(path.join(__dirname, '..', 'openapi', 'openapi.yaml'));
 
   app.disable('x-powered-by');
   app.use(express.json({ limit: '100kb' }));
