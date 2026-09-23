@@ -4,6 +4,12 @@ Proyecto académico desarrollado con **Node.js, Express y PostgreSQL**. Incluye 
 
 > La consigna menciona `posts.author_id (FK -> users.id)`, pero la entidad definida se llama `authors`. Por coherencia, la implementación usa `posts.author_id -> authors.id`.
 
+## API desplegada
+
+- API: https://proyectom2josereategui-production.up.railway.app
+- Documentación Swagger: https://proyectom2josereategui-production.up.railway.app/api-docs
+- Estado de la API: https://proyectom2josereategui-production.up.railway.app/health
+
 ## Tecnologías
 
 - Node.js 20+
