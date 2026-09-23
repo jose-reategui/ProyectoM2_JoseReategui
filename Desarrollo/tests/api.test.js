@@ -77,6 +77,15 @@ describe('API REST Authors, Posts y Comments', () => {
     expect(byAuthor.status).toBe(200);
     expect(byAuthor.body[0].author.email).toBe('ana@example.com');
 
+    const preserved = await request(app).put(`/posts/${postId}`).send({
+    author_id: author.id,
+    title: 'Post actualizado',
+    content: 'Contenido actualizado',
+    });
+
+    expect(preserved.status).toBe(200);
+    expect(preserved.body.published).toBe(true);
+
     const updated = await request(app).put(`/posts/${postId}`).send({
       author_id: author.id,
       title: 'Post actualizado',

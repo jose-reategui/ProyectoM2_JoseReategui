@@ -53,16 +53,26 @@ module.exports = function createPostsService(db) {
       return rows[0];
     },
 
-    async update(id, { author_id, title, content, published = false }) {
-      const { rows } = await db.query(
-        `UPDATE posts
-         SET author_id = $1, title = $2, content = $3, published = $4
-         WHERE id = $5
-         RETURNING *`,
-        [author_id, title.trim(), content.trim(), published, id]
-      );
-      return rows[0] || null;
-    },
+   async update(id, { author_id, title, content, published }) {
+  const { rows } = await db.query(
+    `UPDATE posts
+     SET author_id = $1,
+         title = $2,
+         content = $3,
+         published = COALESCE($4, published)
+     WHERE id = $5
+     RETURNING *`,
+    [
+      author_id,
+      title.trim(),
+      content.trim(),
+      published ?? null,
+      id,
+    ]
+  );
+
+  return rows[0] || null;
+},
 
     async remove(id) {
       const result = await db.query('DELETE FROM posts WHERE id = $1', [id]);
