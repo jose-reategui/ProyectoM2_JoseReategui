@@ -7,10 +7,27 @@ servers:
   - url: http://localhost:3000
     description: Desarrollo local
 tags:
+  - name: System
   - name: Authors
   - name: Posts
   - name: Comments
 paths:
+  /health:
+    get:
+      tags: [System]
+      summary: Verificar el estado de la API
+      responses:
+        '200':
+          description: API disponible
+          content:
+            application/json:
+              schema:
+                type: objectS
+                required: [status]
+                properties:
+                  status:
+                    type: string
+                    example: ok
   /authors:
     get:
       tags: [Authors]
@@ -182,8 +199,8 @@ components:
       type: object
       required: [name, email]
       properties:
-        name: { type: string, example: Ana Torres }
-        email: { type: string, format: email, example: ana@example.com }
+        name: { type: string, minLength: 1, maxLength: 120, example: Ana Torres }
+        email: { type: string, format: email, minLength: 3, maxLength: 255, example: ana@example.com }
         bio: { type: string, nullable: true, example: Autora de tecnología }
     Post:
       allOf:
@@ -197,8 +214,8 @@ components:
       required: [author_id, title, content]
       properties:
         author_id: { type: integer, minimum: 1, example: 1 }
-        title: { type: string, example: Mi primer post }
-        content: { type: string, example: Contenido del post }
+        title: { type: string, minLength: 1, maxLength: 200, example: Mi primer post }
+        content: { type: string, minLength: 1, example: Contenido del post }
         published: { type: boolean, default: false }
     CommentInput:
       type: object
@@ -209,5 +226,6 @@ components:
         content: { type: string, example: Excelente publicación }
     Error:
       type: object
+      required: [error]
       properties:
         error: { type: string }
