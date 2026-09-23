@@ -19,16 +19,16 @@ Proyecto académico desarrollado con **Node.js, Express y PostgreSQL**. Incluye 
 ├── openapi/        # Especificación OpenAPI en YAML
 ├── scripts/        # Ejecutores Node para setup y seed
 ├── sql/            # setup.sql y seed.sql
-src/
-├── controllers/    # Manejo de solicitudes y respuestas HTTP
-├── db/             # Pool de PostgreSQL
-├── middlewares/    # Errores y rutas no encontradas
-├── routes/         # Definición de endpoints
-├── services/       # Consultas SQL parametrizadas
-├── utils/          # Validaciones y errores HTTP
-├── app.js          # Configuración de Express
-└── server.js       # Inicio del servidor
-tests/              # Pruebas con Jest y Supertest
+├── src/
+│   ├── controllers/    # Solicitudes y respuestas HTTP
+│   ├── db/             # Pool de PostgreSQL
+│   ├── middlewares/    # Errores y rutas no encontradas
+│   ├── routes/         # Definición de endpoints
+│   ├── services/       # Consultas SQL parametrizadas
+│   ├── utils/          # Validaciones y errores HTTP
+│   ├── app.js          # Configuración de Express
+│   └── server.js       # Inicio del servidor
+└── tests/          # Pruebas con Jest y Supertest
 ```
 
 ## Ejecutar localmente
@@ -44,6 +44,7 @@ CREATE DATABASE blog_api;
 ### 2. Configuración
 
 ```bash
+cd Desarrollo
 npm install
 ```
 
@@ -142,11 +143,12 @@ Crear comment:
 1. Sube el proyecto a un repositorio de GitHub, sin `.env` ni `node_modules`.
 2. En Railway crea un proyecto nuevo y agrega un servicio **PostgreSQL**.
 3. Agrega un servicio desde el repositorio de GitHub.
-4. En variables del servicio verifica que exista `DATABASE_URL`. Railway suele proporcionarla al conectar PostgreSQL.
-5. Agrega `NODE_ENV=production`. No es necesario fijar `PORT`; Railway la proporciona.
-6. La configuración `railway.json` ejecuta `npm run migrate` antes del despliegue y `npm start` para iniciar.
-7. Genera un dominio público desde **Settings > Networking**.
-8. Verifica `/health` y luego abre `/api-docs` en el dominio público.
+4. En la configuración del servicio establece **Root Directory** como `/Desarrollo`, porque allí se encuentran `package.json` y `railway.json`.
+5. En variables del servicio verifica que exista `DATABASE_URL`. Railway suele proporcionarla al conectar PostgreSQL.
+6. Agrega `NODE_ENV=production`. No es necesario fijar `PORT`; Railway la proporciona.
+7. La configuración `railway.json` ejecuta `npm run migrate` antes del despliegue y `npm start` para iniciar.
+8. Genera un dominio público desde **Settings > Networking**.
+9. Verifica `/health` y luego abre `/api-docs` en el dominio público.
 
 ## Códigos HTTP
 
