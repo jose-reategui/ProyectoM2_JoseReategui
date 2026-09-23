@@ -4,8 +4,8 @@ info:
   version: 1.0.0
   description: API académica construida con Node.js, Express y PostgreSQL. Incluye comments como extra credit.
 servers:
-  - url: http://localhost:3000
-    description: Desarrollo local
+  - url: /
+    description: Servidor actual
 tags:
   - name: System
   - name: Authors
